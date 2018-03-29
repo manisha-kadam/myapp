@@ -1,0 +1,39 @@
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" #frm="ngForm" (ngSubmit)="validate(frm)">
+      <input  type="text" id="username" name="username" placeholder="username" ngModel #username="ngModel" required/>
+    
+      <div *ngIf="username.errors?.required" class="alert">
+        Invalid User name 
+      </div>
+    
+
+      <input  type="password" id="password" name="password" placeholder="password"#password="ngModel" ngModel required/>
+      <div *ngIf="password.errors?.required" class="alert">
+        Invalid Password
+      </div>
+      <button type="submit" id="submit" name="button" [disabled]="frm.invalid">login</button>
+    <!--  <p class="message">Not registered? 
+        <a href="#">Create an account</a></p> -->
+    </form>
+  </div>
+</div>
+
+
+<script>
+  //Login
+    $('#submit').click(function(e) {
+      var username = $('#username').val();
+      var password = $('#password').val();
+        
+      $.ajax({
+      method: "POST",
+      url: "/login",
+      contentType: "application/json",
+     data: JSON.stringify({username:username,password:password })
+      }).done(function(data) {
+        $('#response').html(AntiXSS.sanitizeInput(data));
+        $('#txtdeviceName').val("");
+      });
+    });
+</script>
